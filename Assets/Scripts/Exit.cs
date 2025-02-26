@@ -10,4 +10,7 @@ public class Exit : ScriptableObject
     [TextArea]
     public string description;
     public Room room;
+
+    public bool isLocked;
+    public bool isHidden;
 }
