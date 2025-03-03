@@ -12,6 +12,8 @@ public class InputManager : MonoBehaviour
     public InputField userInput; // the input field object
     public Text inputText; // part of the input field where user enters response
     public Text placeHolderText; // part of the input field for initial placeholder text
+    public delegate void Restart();
+    public event Restart onRestart;
     
     private string story; // holds the story to display
     private List<string> commands = new List<string>(); //valid user comments
@@ -31,6 +33,7 @@ public class InputManager : MonoBehaviour
 
         commands.Add("go");
         commands.Add("get");
+        commands.Add("restart");
 
         userInput.onEndEdit.AddListener(GetInput);
         story = storyText.text;
@@ -58,11 +61,11 @@ public class InputManager : MonoBehaviour
                         //fill in later
                     }
                     else
-                        UpdateStory("Exit does not exist. Try again.");
+                        UpdateStory("Exit does not exist or is locked. Try again.");
                 }
 
-                else if(parts[0] == "get")
-                    {
+                else if (parts[0] == "get")
+                {
                     if (NavigationManager.instance.TakeItem(parts[1]))   //return true or false
                     {
                         GameManager.instance.inventory.Add(parts[1]);
@@ -70,6 +73,11 @@ public class InputManager : MonoBehaviour
                     }
                     else
                         UpdateStory(parts[1] + " does not exist in this room. Try again.");
+                }
+                else if (parts[0] == "restart")
+                {
+                    if (onRestart != null)   //if anyone is listening
+                        onRestart();
                 }
             }
 

@@ -24,6 +24,12 @@ public class NavigationManager : MonoBehaviour
 
     void Start()
     {
+        InputManager.instance.onRestart += ResetGame;
+        ResetGame();
+    }
+
+    void ResetGame()
+    {
         toKeyNorth.isHidden = true;
         currentRoom = startingRoom;
         Unpack();
@@ -52,14 +58,26 @@ public class NavigationManager : MonoBehaviour
     {
         if(exitRooms.ContainsKey(direction))
         {
-            currentRoom = exitRooms[direction];
-            InputManager.instance.UpdateStory("You go " + direction);
-            Unpack();
-            return true;
+            if (!GetExit(direction).isLocked || GameManager.instance.inventory.Contains("key")) //only proceed if not locked or has key
+            {
+                currentRoom = exitRooms[direction];
+                InputManager.instance.UpdateStory("You go " + direction);
+                Unpack();
+                return true;
+            }
         }
         return false;
     }
 
+    Exit GetExit(string direction)
+    {
+        foreach (Exit e in currentRoom.exits)
+        {
+            if (e.direction.ToString() == direction)
+                return e;
+        }
+        return null;
+    }
     public bool TakeItem(string item)
     {
         if (item == "key" && currentRoom.hasKey)
