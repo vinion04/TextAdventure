@@ -17,6 +17,27 @@ public class ToggleController : MonoBehaviour
     {
         Toggle toggle = GetComponent<Toggle>();
         darkMode = toggle.isOn;
+        int pref = PlayerPrefs.GetInt("theme", 1);
+
+        if (pref == 1)
+        {
+            toggle.isOn = true;
+            darkMode = true;
+        }
+        else
+        {
+            toggle.isOn = false;
+            darkMode = false;
+        }
+
+        SetTheme();
+        toggle.onValueChanged.AddListener(ProcessChange);
+    }
+
+    void ProcessChange(bool value)
+    {
+        darkMode = value;
+        PlayerPrefs.SetInt("theme", darkMode ? 1 : 0);
         SetTheme();
     }
 

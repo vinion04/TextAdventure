@@ -9,6 +9,11 @@ public class NavigationManager : MonoBehaviour
     public Room startingRoom;
     public Room currentRoom;
     public Exit toKeyNorth;
+    public List<Room> rooms;
+
+    //delegate
+    public delegate void GameOver();
+    public event GameOver onGameOver;
 
     private Dictionary<string, Room> exitRooms = new Dictionary<string, Room>();
 
@@ -25,10 +30,9 @@ public class NavigationManager : MonoBehaviour
     void Start()
     {
         InputManager.instance.onRestart += ResetGame;
-        ResetGame();
     }
 
-    void ResetGame()
+    public void ResetGame()
     {
         toKeyNorth.isHidden = true;
         currentRoom = startingRoom;
@@ -51,6 +55,10 @@ public class NavigationManager : MonoBehaviour
         }
 
         InputManager.instance.UpdateStory(desc);
+
+        if(exitRooms.Count == 0)
+            if(onGameOver != null) //is anyone listening?
+                onGameOver();
 
     }
 
@@ -89,5 +97,19 @@ public class NavigationManager : MonoBehaviour
         }
         else
             return false;
+    }
+
+    public Room GetRoomFromName(string name)
+    {
+        foreach (Room aRoom in rooms)
+            if (aRoom.name == name)
+                return aRoom;
+        return null;
+    }
+
+    public void SwitchRooms(Room room)
+    {
+        currentRoom = room;
+        Unpack();
     }
 }
