@@ -35,6 +35,8 @@ public class InputManager : MonoBehaviour
         commands.Add("get");
         commands.Add("restart");
         commands.Add("save");
+        commands.Add("commands");
+        commands.Add("inventory");
 
         userInput.onEndEdit.AddListener(GetInput);
         story = storyText.text;
@@ -89,6 +91,22 @@ public class InputManager : MonoBehaviour
                 else if(parts[0] == "save")
                 {
                     GameManager.instance.Save();
+                }
+                else if(parts[0] == "commands")
+                {
+                    UpdateStory("------COMMANDS------");
+                    for(int i=0;i<commands.Count;i++)
+                    {
+                        UpdateStory(commands[i]);
+                    }
+                }
+                else if(parts[0] == "inventory")
+                {
+                    UpdateStory("------INVENTORY------");
+                    for(int i=0;i<GameManager.instance.inventory.Count;i++)
+                    {
+                        UpdateStory(GameManager.instance.inventory[i]);
+                    }
                 }
             }
 
