@@ -7,9 +7,10 @@ public class ToggleController : MonoBehaviour
 {
     public Image background;
     public Text displayText;
-    public Text toggleText;
+    public Text themeToggleText;
     public Text inputText;
     public Text placeHolderText;
+    public Text sizeToggleText;
 
     private bool darkMode;
 
@@ -47,17 +48,19 @@ public class ToggleController : MonoBehaviour
         {
             background.color = Color.black;
             displayText.color = Color.white;
-            toggleText.color = Color.white;
+            themeToggleText.color = Color.white;
             inputText.color = Color.white;
             placeHolderText.color = Color.white;
+            sizeToggleText.color = Color.white;
         }
         else
         {
             background.color = Color.white;
             displayText.color = Color.black;
-            toggleText.color = Color.black;
+            themeToggleText.color = Color.black;
             inputText.color = Color.black;
             placeHolderText.color = Color.black;
+            sizeToggleText.color = Color.black;
         }
     }
 }

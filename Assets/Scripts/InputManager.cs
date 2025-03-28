@@ -14,6 +14,8 @@ public class InputManager : MonoBehaviour
     public Text placeHolderText; // part of the input field for initial placeholder text
     public delegate void Restart();
     public event Restart onRestart;
+
+    public Button commandsButton;
     
     private string story; // holds the story to display
     private List<string> commands = new List<string>(); //valid user comments
@@ -35,12 +37,13 @@ public class InputManager : MonoBehaviour
         commands.Add("get");
         commands.Add("restart");
         commands.Add("save");
-        commands.Add("commands");
         commands.Add("inventory");
 
         userInput.onEndEdit.AddListener(GetInput);
         story = storyText.text;
         NavigationManager.instance.onGameOver += EndGame;
+        
+        commandsButton.onClick.AddListener(DisplayCommands);
     }
 
     void EndGame()
@@ -92,14 +95,6 @@ public class InputManager : MonoBehaviour
                 {
                     GameManager.instance.Save();
                 }
-                else if(parts[0] == "commands")
-                {
-                    UpdateStory("------COMMANDS------");
-                    for(int i=0;i<commands.Count;i++)
-                    {
-                        UpdateStory(commands[i]);
-                    }
-                }
                 else if(parts[0] == "inventory")
                 {
                     UpdateStory("------INVENTORY------");
@@ -109,10 +104,18 @@ public class InputManager : MonoBehaviour
                     }
                 }
             }
-
         }
 
         userInput.text = "";    //after input from user, reset
         userInput.ActivateInputField();
+    }
+
+    private void DisplayCommands()
+    {
+        UpdateStory("------COMMANDS------");
+        for(int i=0;i<commands.Count;i++)
+        {
+            UpdateStory(commands[i]);
+        }
     }
 }
